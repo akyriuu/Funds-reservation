@@ -1,0 +1,100 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum HoldStatus {
+  PENDING
+  CAPTURED
+  RELEASED
+  EXPIRED
+}
+
+enum LedgerEntryType {
+  DEPOSIT
+  HOLD_RESERVED
+  HOLD_CAPTURED
+  HOLD_RELEASED
+  HOLD_EXPIRED
+}
+
+model Account {
+  id       String @id @default(cuid())
+  currency String @default("BRL")
+
+  balanceCents   BigInt @default(0)
+  reservedCents  BigInt @default(0)
+  availableCents BigInt @default(0)
+
+  holds   Hold[]
+  entries LedgerEntry[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([currency])
+}
+
+model Hold {
+  id        String  @id @default(cuid())
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+
+  amountCents   BigInt
+  capturedCents BigInt     @default(0)
+  status        HoldStatus @default(PENDING)
+
+  idempotencyKey String   @unique
+  expiresAt      DateTime
+
+  entries LedgerEntry[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  settledAt DateTime?
+
+  @@index([accountId, status])
+  @@index([status, expiresAt])
+}
+
+model LedgerEntry {
+  id String @id @default(cuid())
+
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  accountId String
+  hold      Hold?   @relation(fields: [holdId], references: [id], onDelete: SetNull)
+  holdId    String?
+
+  type        LedgerEntryType
+  amountCents BigInt
+
+  balanceAfter   BigInt
+  reservedAfter  BigInt
+  availableAfter BigInt
+
+  createdAt DateTime @default(now())
+
+  @@index([accountId, createdAt])
+  @@index([holdId])
+}
+
+model IdempotencyRecord {
+  id String @id @default(cuid())
+
+  key         String
+  endpoint    String
+  requestHash String
+
+  responseStatus Int
+  responseBody   Json
+
+  createdAt DateTime @default(now())
+
+  @@unique([key, endpoint])
+  @@index([createdAt])
+}
