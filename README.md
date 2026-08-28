@@ -1,4 +1,4 @@
-# Hold-System
+# Fund Reservation / Hold-System
 
 > 🇧🇷 [Leia em português](#sistema-de-segurança)
 
@@ -242,7 +242,7 @@ Every test closes by asserting the invariants:
 ---
 ---
 
-# Sistema de Segurança
+# Reserva de fundos / Sistema de Seguro
 
 > 🇺🇸 [Read in English](#hold-system)
 
