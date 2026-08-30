@@ -30,6 +30,9 @@ RESERVE
 Capture may be **partial**: authorize R$ 100, capture R$ 80, and the remaining
 R$ 20 returns to available immediately.
 
+
+<img width="2820" height="4476" alt="Reserva de Fundos — Fluxo Completo@2x" src="https://github.com/user-attachments/assets/2379ea39-36d7-48ac-978c-d268af709360" />
+
 ---
 
 ## The problem it solves
@@ -277,6 +280,9 @@ A captura pode ser **parcial**: autorize R$ 100, capture R$ 80, e os R$ 20
 restantes voltam para o disponível na hora.
 
 ---
+
+<img width="2820" height="4476" alt="Reserva de Fundos — Fluxo Completo@2x" src="https://github.com/user-attachments/assets/bfa2fdf0-feca-43d6-953a-9712596febd4" />
+
 
 ## O problema que resolve
 
